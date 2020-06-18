@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:file_picker/file_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -9,10 +11,33 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  AudioPlayer _audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+  String currentTime = "00:00";
+  String completeTime= "00:00";
+
+  @override
+  void initState() {
+    super.initState();
+
+    _audioPlayer.onAudioPositionChanged.listen((Duration duration){
+      setState(() {
+        currentTime = duration.toString().split(".")[0];
+      });
+    });
+
+    _audioPlayer.onDurationChanged.listen((Duration duration){
+      setState(() {
+        completeTime = duration.toString().split(".")[0];
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const color = const Color(0xffFE6F5E);
     const color1 = const Color(0xffFFF1D7);
+    const color2 = const Color(0xffE34A27);
     return Scaffold(
 //      backgroundColor: Colors.blueGrey.shade100,
       backgroundColor: color,
@@ -29,7 +54,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.black,
                     size: 30.0,
                   ),
-                  onPressed: () { },
+                  onPressed: () async {
+                    String filePath = await FilePicker.getFilePath();
+                    int status = await _audioPlayer.play(filePath, isLocal: true);
+
+                    if(status == 1) {
+                      setState(() {
+                        isPlaying = true;
+                      });
+                    }
+                  },
                 ),
               ),
             ],
@@ -72,14 +106,15 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.only(left: 20,right: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
               children: <Widget>[
-                Text("1.30",
+                Text(currentTime,
                     style: TextStyle(
                     fontSize:13,
                     color: Colors.black,
                     fontWeight: FontWeight.w600
                 )),
-                Text("3.00",
+                Text(completeTime,
                     style: TextStyle(
                         fontSize:13,
                         color: Colors.black,
@@ -127,16 +162,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 75,
                   width: 75,
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: color2,
                     borderRadius: BorderRadius.circular(45),
                   ),
                   child: IconButton(
-                    icon: Icon(
-                      Icons.pause,
-                      size: 30,
+                    icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow,
+                        size: 30,
                       color: Colors.black,
                     ),
-                    onPressed: (){ },
+                    onPressed: (){
+                      if(isPlaying){
+                        _audioPlayer.pause();
+
+                        setState(() {
+                          isPlaying = false;
+                        });
+                      }else{
+                        _audioPlayer.resume();
+
+                        setState(() {
+                          isPlaying = true;
+                        });
+                      }
+                    },
                   ),
                 ),
                 SizedBox(width: 18,),
