@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
@@ -38,6 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
     const color = const Color(0xffFE6F5E);
     const color1 = const Color(0xffFFF1D7);
     const color2 = const Color(0xffE34A27);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
 //      backgroundColor: Colors.blueGrey.shade100,
       backgroundColor: color,
