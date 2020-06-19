@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,6 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isPlaying = false;
   String currentTime = "00:00";
   String completeTime= "00:00";
+  double currentTimeSlider = 0.0;
+  double completeTimeSlider = 0.0;
 
   @override
   void initState() {
@@ -24,27 +27,34 @@ class _HomeScreenState extends State<HomeScreen> {
     _audioPlayer.onAudioPositionChanged.listen((Duration duration){
       setState(() {
         currentTime = duration.toString().split(".")[0];
+        currentTimeSlider = duration.inSeconds.toDouble();
       });
     });
 
     _audioPlayer.onDurationChanged.listen((Duration duration){
       setState(() {
         completeTime = duration.toString().split(".")[0];
+        completeTimeSlider = duration.inSeconds.toDouble();
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    const color = const Color(0xffFE6F5E);
-    const color1 = const Color(0xffFFF1D7);
-    const color2 = const Color(0xffE34A27);
+//    const color = const Color(0xffFE6F5E);
+//    const color1 = const Color(0xffFFF1D7);
+//    const color2 = const Color(0xffE34A27);
+    String filePath="";
+    String songName = "Song Name";
+//    if(filePath!=" "){
+//      songName = filePath.split('/').last;
+//    }
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
-    ]);
+    ]); // For only allowing portrait view of the player
     return Scaffold(
 //      backgroundColor: Colors.blueGrey.shade100,
-      backgroundColor: color,
+      backgroundColor: Colors.blueGrey[100],
       body: SafeArea(
       child: Column(
         children: <Widget>[
@@ -59,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     size: 30.0,
                   ),
                   onPressed: () async {
-                    String filePath = await FilePicker.getFilePath();
+                    filePath = await FilePicker.getFilePath();
                     int status = await _audioPlayer.play(filePath, isLocal: true);
 
                     if(status == 1) {
@@ -78,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 300,
               width: 300,
               decoration: BoxDecoration(
-                color: color1,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(150),
               ),
               padding: EdgeInsets.all(6),
@@ -88,9 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+//        SleekCircularSlider(
+//          min: 0,
+//          max: completeTimeSlider,
+//          initialValue: 0.0,
+//          onChange: (double value) {}
+//        ),
           SizedBox(height: 30,),
-          Text(
-              "Song Name",
+          Text(songName,
               style: TextStyle(
                   fontSize:20,
                   fontWeight: FontWeight.w600
@@ -128,9 +143,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Slider(
-            min: 0,
-            max: 3,
-            value: 1.5,
+            value: currentTimeSlider,
+            min: 0.0,
+            max: completeTimeSlider,
+            onChanged: (double value){
+              setState(() {
+                _audioPlayer.seek(Duration(milliseconds: (value / 1000.0).toInt()));
+                value = value;
+              });
+            },
+            activeColor: Colors.blueAccent,
+            inactiveColor: Colors.grey,
           ),
           SizedBox(height: 30,),
           Center(
@@ -149,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
-                    color: color1,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(30),
                   ),
                    child: IconButton(
@@ -166,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 75,
                   width: 75,
                   decoration: BoxDecoration(
-                    color: color2,
+                    color: Colors.blueAccent,
                     borderRadius: BorderRadius.circular(45),
                   ),
                   child: IconButton(
@@ -196,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
-                    color: color1,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: IconButton(
@@ -214,7 +237,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.repeat,
                     size: 20,
                   ),
-                  onPressed: () { },
+                  onPressed: () {
+//                    _audioPlayer.setReleaseMode(ReleaseMode.LOOP);
+                  },
                 ),
               ],
             ),
