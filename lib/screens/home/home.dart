@@ -61,8 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                Color.fromARGB(255, 25, 178, 238),
-                Color.fromARGB(255, 21, 236, 229),
+                    Colors.grey,
+                    Colors.white,
+//                Color.fromARGB(255, 25, 178, 238),
+//                Color.fromARGB(255, 21, 236, 229),
 //                    Color.fromARGB(255, 190,101,245),
 //                    Color.fromARGB(255, 218,120,221),
 //                    Color.fromARGB(255, 249,123,160),
@@ -102,13 +104,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      alignment: Alignment.center,
+//                      height: 300,
+//                      width: 300,
+//                      alignment: Alignment.center,
                       child: SleekCircularSlider(
                         min: 0.0,
                         max: completeTimeSlider,
-                        initialValue: currentTimeSlider ?? 0,
+                        initialValue:  0.0 ?? currentTimeSlider,
                         appearance: CircularSliderAppearance(
-                          size: 340,
+                          size: 200,
                           startAngle: 180,
                           angleRange: 180,
                           counterClockwise: true,
@@ -132,11 +136,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Container(
-                      alignment: Alignment.center,
+//                      height: 300,
+//                      width: 300,
+//                      alignment: Alignment.center,
                       padding: EdgeInsets.all(6),
                       child: CircleAvatar(
                         backgroundImage: AssetImage('assets/2.jpg'),
-                        maxRadius: 160,
+                        maxRadius: 100,
                       ),
                     ),
                   ],
