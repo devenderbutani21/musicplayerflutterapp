@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -101,23 +102,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      height: 300,
-                      width: 300,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 10.0,
-                        backgroundColor: Colors.grey,
-                        valueColor:
-                            new AlwaysStoppedAnimation<Color>(Colors.blue),
-                        value: currentTimeSlider,
+                      alignment: Alignment.center,
+                      child: SleekCircularSlider(
+                        min: 0.0,
+                        max: completeTimeSlider,
+                        initialValue: currentTimeSlider ?? 0,
+                        appearance: CircularSliderAppearance(
+                          size: 340,
+                          startAngle: 180,
+                          angleRange: 180,
+                          counterClockwise: true,
+                          customWidths: CustomSliderWidths(progressBarWidth: 7),
+                        ),
+                        onChange: (value) {
+                          setState(() {
+                            _audioPlayer.seek(Duration(milliseconds: (value/1000.0).toInt()));
+                            value = currentTimeSlider;
+                          });
+                        },
+                        onChangeStart: (double startValue) {
+                          // callback providing a starting value (when a pan gesture starts)
+                        },
+                        onChangeEnd: (double endValue) {
+                          // ucallback providing an ending value (when a pan gesture ends)
+                        },
+                        innerWidget: (double value) {
+                          // use your custom widget inside the slider (gets a slider value from the callback)
+                        },
                       ),
                     ),
                     Container(
-                      height: 300,
-                      width: 300,
-//                      decoration: BoxDecoration(
-//                        color: Colors.white,
-//                        borderRadius: BorderRadius.circular(150),
-//                      ),
+                      alignment: Alignment.center,
                       padding: EdgeInsets.all(6),
                       child: CircleAvatar(
                         backgroundImage: AssetImage('assets/2.jpg'),
