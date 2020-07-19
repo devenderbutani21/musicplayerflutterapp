@@ -46,11 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
     String filePath = "";
     String songName = "Song Name";
     if (filePath != "") {
-      songName = filePath.split('/').last;
+      songName = filePath
+          .split('/')
+          .last;
     }
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
-    ]); // For only allowing portrait view of the player
+    ]);
     return Scaffold(
 //      backgroundColor: Colors.blueGrey.shade100,
 //      backgroundColor: Colors.black54,
@@ -69,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                    Color.fromARGB(255, 218,120,221),
 //                    Color.fromARGB(255, 249,123,160),
 //                    Color.fromARGB(255, 250,112,137),
-              ])),
+                  ])),
           child: Column(
             children: <Widget>[
               Row(
@@ -85,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () async {
                         filePath = await FilePicker.getFilePath();
                         int status =
-                            await _audioPlayer.play(filePath, isLocal: true);
+                        await _audioPlayer.play(filePath, isLocal: true);
 
                         if (status == 1) {
                           setState(() {
@@ -101,44 +103,45 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 10,
               ),
               Center(
-                child: Stack(
+                child: Column(
                   children: <Widget>[
+//                    Container(
+////                      height: 300,
+////                      width: 300,
+////                      alignment: Alignment.center,
+//                      child: SleekCircularSlider(
+//                        min: 0.0,
+//                        max: completeTimeSlider,
+//                        initialValue: 0.0 ?? currentTimeSlider,
+//                        appearance: CircularSliderAppearance(
+//                          size: 200,
+//                          startAngle: 180,
+//                          angleRange: 180,
+//                          counterClockwise: true,
+//                          customWidths: CustomSliderWidths(progressBarWidth: 7),
+//                        ),
+//                        onChange: (value) {
+//                          setState(() {
+//                            _audioPlayer.seek(Duration(
+//                                milliseconds: (value / 1000.0).toInt()));
+//                            value = currentTimeSlider;
+//                          });
+//                        },
+//                        onChangeStart: (double startValue) {
+//                          // callback providing a starting value (when a pan gesture starts)
+//                        },
+//                        onChangeEnd: (double endValue) {
+//                          // ucallback providing an ending value (when a pan gesture ends)
+//                        },
+//                        innerWidget: (double value) {
+//                          // use your custom widget inside the slider (gets a slider value from the callback)
+//                        },
+//                      ),
+//                    ),
                     Container(
-//                      height: 300,
-//                      width: 300,
-//                      alignment: Alignment.center,
-                      child: SleekCircularSlider(
-                        min: 0.0,
-                        max: completeTimeSlider,
-                        initialValue:  0.0 ?? currentTimeSlider,
-                        appearance: CircularSliderAppearance(
-                          size: 200,
-                          startAngle: 180,
-                          angleRange: 180,
-                          counterClockwise: true,
-                          customWidths: CustomSliderWidths(progressBarWidth: 7),
-                        ),
-                        onChange: (value) {
-                          setState(() {
-                            _audioPlayer.seek(Duration(milliseconds: (value/1000.0).toInt()));
-                            value = currentTimeSlider;
-                          });
-                        },
-                        onChangeStart: (double startValue) {
-                          // callback providing a starting value (when a pan gesture starts)
-                        },
-                        onChangeEnd: (double endValue) {
-                          // ucallback providing an ending value (when a pan gesture ends)
-                        },
-                        innerWidget: (double value) {
-                          // use your custom widget inside the slider (gets a slider value from the callback)
-                        },
-                      ),
-                    ),
-                    Container(
-//                      height: 300,
-//                      width: 300,
-//                      alignment: Alignment.center,
+                      height: 300,
+                      width: 300,
+                      alignment: Alignment.center,
                       padding: EdgeInsets.all(6),
                       child: CircleAvatar(
                         backgroundImage: AssetImage('assets/2.jpg'),
